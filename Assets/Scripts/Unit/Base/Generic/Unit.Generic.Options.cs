@@ -16,12 +16,12 @@ namespace Aggressors
                 this.owner = owner;
             }
 
-            public void Register(Action action)
+            public void RegisterAction(Action action)
             {
                 owner.OnUpdate += action;
             }
 
-            public void Register<T>(Action<List<T>> targetingMethod) where T : Unit
+            public void RegisterTargetingAction<T>(Action<List<T>> targetingMethod) where T : Unit
             {
                 owner.OnUpdate += () => targetingMethod(UnitsManager.Instance.GetUnits<T>());
             }

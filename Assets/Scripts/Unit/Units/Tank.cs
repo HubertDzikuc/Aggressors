@@ -16,7 +16,7 @@ namespace Aggressors
 
         protected override void Initialize(InitializeOptions options)
         {
-            options.Register<APC>(TargetingTanks);
+            options.RegisterTargetingAction<APC>(TargetingTanks);
         }
     }
 }
