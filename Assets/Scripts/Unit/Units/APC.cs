@@ -11,7 +11,7 @@ namespace Aggressors
             Debug.Log($"{gameObject.name} Targeted by {enemy}");
         }
 
-        protected override void Register(UnitOptions options)
+        protected override void Initialize(InitializeOptions options)
         {
 
         }

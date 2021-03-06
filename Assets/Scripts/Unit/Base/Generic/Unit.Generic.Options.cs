@@ -7,18 +7,23 @@ namespace Aggressors
 {
     public partial class Unit<TSelf>
     {
-        public class UnitOptions
+        protected class InitializeOptions
         {
             private Unit<TSelf> owner;
 
-            public UnitOptions(Unit<TSelf> owner)
+            public InitializeOptions(Unit<TSelf> owner)
             {
                 this.owner = owner;
             }
 
-            public void RegisterTargeting<T>(Action<List<T>> targetingMethod) where T : Unit
+            public void Register(Action action)
             {
-                owner.targetingMethods.Add(() => targetingMethod(UnitsManager.Instance.GetUnits<T>()));
+                owner.OnUpdate += action;
+            }
+
+            public void Register<T>(Action<List<T>> targetingMethod) where T : Unit
+            {
+                owner.OnUpdate += () => targetingMethod(UnitsManager.Instance.GetUnits<T>());
             }
         }
     }

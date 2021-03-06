@@ -14,9 +14,9 @@ namespace Aggressors
             }
         }
 
-        protected override void Register(UnitOptions options)
+        protected override void Initialize(InitializeOptions options)
         {
-            options.RegisterTargeting<APC>(TargetingTanks);
+            options.Register<APC>(TargetingTanks);
         }
     }
 }

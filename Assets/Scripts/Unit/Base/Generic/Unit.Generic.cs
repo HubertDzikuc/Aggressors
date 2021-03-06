@@ -7,15 +7,15 @@ namespace Aggressors
 {
     public abstract partial class Unit<TSelf> : Unit where TSelf : Unit<TSelf>
     {
-        private List<Action> targetingMethods = new List<Action>();
+        private event Action OnUpdate;
 
-        protected abstract void Register(UnitOptions options);
+        protected abstract void Initialize(InitializeOptions options);
         protected virtual void OnTargeted<T>(T unit) where T : Unit<T>
         { }
 
-        protected override void Register()
+        protected override void Initialize()
         {
-            Register(new UnitOptions(this));
+            Initialize(new InitializeOptions(this));
         }
 
         protected void Target<T>(T target) where T : Unit<T>
@@ -25,15 +25,7 @@ namespace Aggressors
 
         protected void Update()
         {
-            RunTargetingMethods();
-        }
-
-        private void RunTargetingMethods()
-        {
-            foreach (var action in targetingMethods)
-            {
-                action.Invoke();
-            }
+            OnUpdate?.Invoke();
         }
     }
 }

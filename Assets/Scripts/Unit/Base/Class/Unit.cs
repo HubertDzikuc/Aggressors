@@ -7,12 +7,12 @@ namespace Aggressors
 {
     public abstract partial class Unit : MonoBehaviour
     {
-        protected abstract void Register();
+        protected abstract void Initialize();
 
         protected void Start()
         {
             UnitsManager.Instance.Register(this);
-            Register();
+            Initialize();
         }
 
         protected void OnDestroy()
