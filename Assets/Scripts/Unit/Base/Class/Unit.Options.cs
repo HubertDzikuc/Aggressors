@@ -24,7 +24,15 @@ namespace Aggressors
 
             public void AddTargeting<T>(Action<List<T>> targetingMethod) where T : Unit
             {
-                owner.OnUpdate += () => targetingMethod(UnitsManager.Instance.GetUnits<T>());
+                owner.OnUpdate += () =>
+                {
+                    var units = UnitsManager.Instance.GetUnits<T>();
+                    if (units != null)
+                    {
+                        targetingMethod(units);
+                    }
+                };
+
             }
 
             public void AddOnTargeted(Action<Unit> onTargeted)

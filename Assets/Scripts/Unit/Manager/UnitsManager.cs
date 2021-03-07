@@ -21,11 +21,11 @@ namespace Aggressors
             var unitType = TypesMapper[typeof(T)];
             if (units.ContainsKey(unitType))
             {
-                return units[unitType].Cast<T>().ToList();
+                return units[unitType].Select(x => (T)x).ToList();
             }
             else
             {
-                return new List<T>();
+                return null;
             }
         }
 
