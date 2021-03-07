@@ -5,14 +5,20 @@ using System;
 
 namespace Aggressors
 {
+    public enum UnitType
+    {
+        APC,
+        Tank,
+    }
+
     public abstract partial class Unit : MonoBehaviour
     {
-        protected abstract void Initialize();
-
+        public UnitType Type { get; private set; }
+        protected abstract void Initialize(InitializeOptions options);
         protected void Start()
         {
-            UnitsManager.Instance.Register(this);
-            Initialize();
+            Type = UnitsManager.Instance.Register(this);
+            Initialize(new InitializeOptions(this));
         }
 
         protected void OnDestroy()

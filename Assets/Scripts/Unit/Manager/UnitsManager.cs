@@ -8,11 +8,17 @@ namespace Aggressors
 {
     public class UnitsManager : Singleton<UnitsManager>
     {
-        private Dictionary<System.Type, List<Unit>> units = new Dictionary<System.Type, List<Unit>>();
+        public static Dictionary<System.Type, UnitType> TypesMapper = new Dictionary<System.Type, UnitType>()
+        {
+            { typeof(APC), UnitType.APC},
+            { typeof(Tank), UnitType.Tank}
+        };
+
+        private Dictionary<UnitType, List<Unit>> units = new Dictionary<UnitType, List<Unit>>();
 
         public List<T> GetUnits<T>() where T : Unit
         {
-            var unitType = typeof(T);
+            var unitType = TypesMapper[typeof(T)];
             if (units.ContainsKey(unitType))
             {
                 return units[unitType].Cast<T>().ToList();
@@ -23,9 +29,9 @@ namespace Aggressors
             }
         }
 
-        public void Register(Unit unit)
+        public UnitType Register(Unit unit)
         {
-            var unitType = unit.GetType();
+            var unitType = TypesMapper[unit.GetType()];
             if (units.ContainsKey(unitType))
             {
                 units[unitType].Add(unit);
@@ -34,11 +40,12 @@ namespace Aggressors
             {
                 units.Add(unitType, new List<Unit> { unit });
             }
+            return unitType;
         }
 
         public void Deregister(Unit unit)
         {
-            var unitType = unit.GetType();
+            var unitType = TypesMapper[unit.GetType()];
             if (units.ContainsKey(unitType))
             {
                 units[unitType].Remove(unit);

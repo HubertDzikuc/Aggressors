@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Aggressors
 {
-    public class Tank : Unit<Tank>
+    public class Tank : Unit
     {
         private void TargetingTanks(List<APC> apcs)
         {
@@ -16,7 +16,7 @@ namespace Aggressors
 
         protected override void Initialize(InitializeOptions options)
         {
-            options.RegisterTargetingAction<APC>(TargetingTanks);
+            options.AddTargeting<APC>(TargetingTanks);
         }
     }
 }
