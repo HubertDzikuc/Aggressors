@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Aggressors.Targeting
 {
-    public class Turret : MonoBehaviour, ITargeting
+    public class Turret : MonoBehaviour, ILockTarget
     {
-        public void Target(Unit target)
+        public void Lock(Unit target)
         {
             throw new System.NotImplementedException();
         }

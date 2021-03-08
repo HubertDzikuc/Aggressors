@@ -23,17 +23,17 @@ namespace Aggressors
                 owner.OnUpdate += action;
             }
 
-            public void AddTargeting<T>(Func<List<T>, T> targetingMethod, ITargeting targeting) where T : Unit
+            public void AddTargeting<T>(TargetSearch.Search<T> targetSearch, ILockTarget targetLock) where T : Unit
             {
                 owner.OnUpdate += () =>
                 {
                     var units = UnitsManager.Instance.GetUnits<T>();
                     if (units != null)
                     {
-                        var target = targetingMethod(units);
+                        var target = targetSearch(units);
                         if (target != null)
                         {
-                            targeting.Target(target);
+                            targetLock.Lock(target);
                             target.OnTargeted?.Invoke(owner);
                         }
                     }
