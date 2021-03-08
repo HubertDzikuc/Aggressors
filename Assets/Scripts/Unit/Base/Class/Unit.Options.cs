@@ -27,18 +27,21 @@ namespace Aggressors
             {
                 owner.OnUpdate += () =>
                 {
-                    var units = UnitsManager.Instance.GetUnits<T>();
-                    if (units != null)
+                    if (targetLock.Locked == false)
                     {
-                        var target = targetSearch(units);
-                        if (target != null)
+                        var units = UnitsManager.Instance.GetUnits<T>();
+                        if (units != null)
                         {
-                            targetLock.Lock(target);
-                            target.OnTargeted?.Invoke(owner);
+                            var target = targetSearch(units);
+                            if (target != null)
+                            {
+                                targetLock.Lock(target);
+                                targetLock.Locked = true;
+                                target.OnTargeted?.Invoke(owner);
+                            }
                         }
                     }
                 };
-
             }
 
             public void AddOnTargeted(Action<Unit> onTargeted)

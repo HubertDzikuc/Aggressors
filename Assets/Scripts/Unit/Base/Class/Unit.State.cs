@@ -11,7 +11,6 @@ namespace Aggressors
         {
             Starting,
             Working,
-
         }
     }
 }
