@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using Aggressors.Targeting;
 
 namespace Aggressors
 {
@@ -22,14 +23,19 @@ namespace Aggressors
                 owner.OnUpdate += action;
             }
 
-            public void AddTargeting<T>(Action<List<T>> targetingMethod) where T : Unit
+            public void AddTargeting<T>(Func<List<T>, T> targetingMethod, ITargeting targeting) where T : Unit
             {
                 owner.OnUpdate += () =>
                 {
                     var units = UnitsManager.Instance.GetUnits<T>();
                     if (units != null)
                     {
-                        targetingMethod(units);
+                        var target = targetingMethod(units);
+                        if (target != null)
+                        {
+                            targeting.Target(target);
+                            target.OnTargeted?.Invoke(owner);
+                        }
                     }
                 };
 

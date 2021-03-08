@@ -10,11 +10,6 @@ namespace Aggressors
         private event Action OnUpdate;
         private event Action<Unit> OnTargeted;
 
-        protected void Target(Unit target)
-        {
-            target.OnTargeted?.Invoke(this);
-        }
-
         protected void Update()
         {
             OnUpdate?.Invoke();
