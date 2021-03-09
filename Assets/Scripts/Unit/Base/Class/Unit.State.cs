@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-
-namespace Aggressors
+﻿namespace Aggressors
 {
     public partial class Unit
     {
