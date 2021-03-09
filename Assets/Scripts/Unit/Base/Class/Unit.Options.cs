@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using System.Linq;
+﻿using System;
 using Aggressors.Targeting;
 
 namespace Aggressors
@@ -23,25 +19,13 @@ namespace Aggressors
                 owner.OnUpdate += action;
             }
 
-            public void AddTargeting<T>(TargetSearch.Search<T> targetSearch, ILockTarget targetLock) where T : Unit
+            public TargetSearchPipeline AddTargeting(ILockTarget targetLock)
             {
-                owner.OnUpdate += () =>
-                {
-                    if (targetLock.Locked == false)
-                    {
-                        var units = UnitsManager.Instance.GetUnits<T>();
-                        if (units != null)
-                        {
-                            var target = targetSearch(units);
-                            if (target != null)
-                            {
-                                targetLock.Lock(target);
-                                targetLock.Locked = true;
-                                target.OnTargeted?.Invoke(owner);
-                            }
-                        }
-                    }
-                };
+                var targetSearchPipeline = new TargetSearchPipeline(targetLock);
+
+                owner.OnUpdate += () => targetSearchPipeline.Handle()?.OnTargeted?.Invoke(owner);
+
+                return targetSearchPipeline;
             }
 
             public void AddOnTargeted(Action<Unit> onTargeted)

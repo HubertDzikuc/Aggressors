@@ -8,7 +8,7 @@ namespace Aggressors
     {
         private void OnTargeted(Unit enemy)
         {
-            //Debug.Log($"{gameObject.name} Targeted by {enemy}");
+            Debug.Log($"{gameObject.name} Targeted by {enemy}");
         }
 
         protected override void Initialize(InitializeOptions options)

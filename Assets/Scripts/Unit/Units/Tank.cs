@@ -22,7 +22,8 @@ namespace Aggressors
 
         protected override void Initialize(InitializeOptions options)
         {
-            options.AddTargeting<APC>(TargetingTanks, turret);
+            options.AddTargeting(turret)
+                .AddAction<APC>(TargetingTanks);
         }
     }
 }
