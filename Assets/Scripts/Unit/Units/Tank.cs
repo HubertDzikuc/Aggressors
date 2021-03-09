@@ -8,7 +8,7 @@ namespace Aggressors
     public class Tank : Unit
     {
         [SerializeField]
-        private Turret turret;
+        private Turret turret = null;
 
         private APC TargetingTanks(List<APC> apcs)
         {
