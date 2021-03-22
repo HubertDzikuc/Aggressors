@@ -28,9 +28,15 @@ namespace Aggressors
                 return targetSearchPipeline;
             }
 
-            public void AddOnTargeted(Action<Unit> onTargeted)
+            public void AddOnTargeted<T>(Action<T> onTargeted) where T : Unit
             {
-                owner.OnTargeted += onTargeted;
+                owner.OnTargeted += unit =>
+                {
+                    if (unit.GetType() == typeof(T))
+                    {
+                        onTargeted((T)unit);
+                    }
+                };
             }
         }
     }

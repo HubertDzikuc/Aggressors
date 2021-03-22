@@ -4,14 +4,14 @@ namespace Aggressors
 {
     public class APC : Unit
     {
-        private void OnTargeted(Unit enemy)
+        private void OnTargeted(Tank enemyTank)
         {
-            Debug.Log($"{gameObject.name} Targeted by {enemy}");
+            Debug.Log($"{gameObject.name} Targeted by {enemyTank}");
         }
 
         protected override void Initialize(InitializeOptions options)
         {
-            options.AddOnTargeted(OnTargeted);
+            options.AddOnTargeted<Tank>(OnTargeted);
         }
     }
 }
