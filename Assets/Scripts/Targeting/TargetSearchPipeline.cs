@@ -5,6 +5,8 @@ namespace Aggressors.Targeting
 {
     public class TargetSearchPipeline
     {
+        public delegate T Search<T>(List<T> targets) where T : Unit;
+
         private List<Func<Unit>> searches = new List<Func<Unit>>();
 
         private ILockTarget lockTarget;
@@ -28,7 +30,7 @@ namespace Aggressors.Targeting
             return null;
         }
 
-        public void AddAction<T>(TargetSearch.Search<T> targetSearch) where T : Unit
+        public void AddAction<T>(Search<T> targetSearch) where T : Unit
         {
             searches.Add(() => targetSearch(UnitsManager.Instance.GetUnits<T>()));
         }

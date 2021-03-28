@@ -2,8 +2,14 @@
 
 namespace Aggressors
 {
+
     public abstract partial class Unit : MonoBehaviour
     {
+
+
+        [field: SerializeField]
+        public uint Cost { get; private set; } = 50;
+
         protected abstract void Initialize(InitializeOptions options);
         protected void Start()
         {

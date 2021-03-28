@@ -19,7 +19,7 @@ namespace Aggressors
             }
             else
             {
-                return null;
+                return new List<T>();
             }
         }
 
