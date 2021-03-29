@@ -3,17 +3,23 @@ using System;
 
 namespace Aggressors.Targeting
 {
-    public class TargetSearchPipeline
+    public interface ITargetSearchPipeline
     {
-        public delegate T Search<T>(List<T> targets) where T : Unit;
+        Unit Handle();
+        void AddAction<T>(Func<List<T>, T> targetSearch) where T : Unit;
+    }
 
+    public class TargetSearchPipeline : ITargetSearchPipeline
+    {
         private List<Func<Unit>> searches = new List<Func<Unit>>();
 
-        private ILockTarget lockTarget;
+        private readonly ILockTarget lockTarget;
+        private readonly IUnitsManager unitsManager;
 
-        public TargetSearchPipeline(ILockTarget lockTarget)
+        public TargetSearchPipeline(ILockTarget lockTarget, IUnitsManager unitsManager)
         {
             this.lockTarget = lockTarget;
+            this.unitsManager = unitsManager;
         }
 
         public Unit Handle()
@@ -30,9 +36,9 @@ namespace Aggressors.Targeting
             return null;
         }
 
-        public void AddAction<T>(Search<T> targetSearch) where T : Unit
+        public void AddAction<T>(Func<List<T>, T> targetSearch) where T : Unit
         {
-            searches.Add(() => targetSearch(UnitsManager.Instance.GetUnits<T>()));
+            searches.Add(() => targetSearch(unitsManager.GetUnits<T>()));
         }
     }
 }

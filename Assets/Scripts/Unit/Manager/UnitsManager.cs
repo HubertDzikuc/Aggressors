@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
-using Aggressors.Utils;
 using System.Linq;
 using System;
-using UnityEngine;
 
 namespace Aggressors
 {
-    public class UnitsManager : Singleton<UnitsManager>
+    public interface IUnitsManager
+    {
+        List<T> GetUnits<T>() where T : Unit;
+        void Register(Unit unit);
+        void Deregister(Unit unit);
+    }
+
+    public class UnitsManager : IUnitsManager
     {
         private Dictionary<Type, List<Unit>> units = new Dictionary<Type, List<Unit>>();
 

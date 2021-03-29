@@ -8,7 +8,7 @@ namespace Aggressors.Resources
         IResources AddResource();
     }
 
-    public class ResourcesManager : Singleton<ResourcesManager>, IResourcesManager
+    public class ResourcesManager : IResourcesManager
     {
         private List<Resources> resources = new List<Resources>();
 

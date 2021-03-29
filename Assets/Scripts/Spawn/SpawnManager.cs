@@ -1,27 +1,41 @@
-using Aggressors.Utils;
 using UnityEngine;
 
 namespace Aggressors.Spawn
 {
+    [System.Serializable]
+    public class SpawnManagerConfiguration // ScriptableObject
+    {
+        [field: SerializeField]
+        public APC Apc { get; private set; }
+        public SpawnManagerConfiguration(APC apc)
+        {
+            this.Apc = apc;
+        }
+    }
+
     public interface ISpawnManager
     {
         Unit SpawnUnit<T>() where T : Unit;
     }
 
-    public class SpawnManager : Singleton<SpawnManager>, ISpawnManager
+    public class SpawnManager : ISpawnManager
     {
-        [SerializeField]
-        private APC apc = null;
+        private SpawnManagerConfiguration configuration;
+
+        public SpawnManager(SpawnManagerConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         public Unit SpawnUnit<T>() where T : Unit
         {
             if (typeof(T) == typeof(APC))
             {
-                return Instantiate(apc);
+                return UnityEngine.Object.Instantiate(configuration.Apc);
             }
             else
             {
-                return Instantiate(apc);
+                return UnityEngine.Object.Instantiate(configuration.Apc);
             }
         }
     }

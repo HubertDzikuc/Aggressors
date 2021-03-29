@@ -3,7 +3,12 @@ using Aggressors.Spawn;
 
 namespace Aggressors
 {
-    public class Player
+    public interface IPlayer
+    {
+
+    }
+
+    public class Player : IPlayer
     {
         public uint Resources => resources.Amount;
         private IResources resources;
