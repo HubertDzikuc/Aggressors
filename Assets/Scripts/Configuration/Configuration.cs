@@ -25,8 +25,10 @@ namespace Aggressors
             services.AddScoped<IPlayer, Player>(() => new Player(Provider.Get<IResourcesManager>(), Provider.Get<IGameManager>(), Provider.Get<ISpawnManager>()));
         }
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
+
             var containter = new DependencyContainer();
             Provider = containter;
             Configure(containter);
