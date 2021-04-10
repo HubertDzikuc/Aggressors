@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Aggressors.Targeting;
+using UnityEngine;
 
 namespace Aggressors
 {
@@ -7,6 +8,13 @@ namespace Aggressors
     {
         [field: SerializeField]
         public uint Cost { get; private set; } = 50;
+
+        protected ITarget Target { get; private set; }
+
+        public void Setup(ITarget target)
+        {
+            Target = target;
+        }
 
         protected abstract void Initialize(InitializeOptions options);
         protected void Start()

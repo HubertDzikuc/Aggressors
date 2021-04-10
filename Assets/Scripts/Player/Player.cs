@@ -1,5 +1,6 @@
 using Aggressors.Resources;
 using Aggressors.Spawn;
+using Aggressors.Targeting;
 
 namespace Aggressors
 {
@@ -28,7 +29,9 @@ namespace Aggressors
         {
             if (input.SpawnUnit())
             {
-                spawnManager.SpawnUnit<APC>(Resources);
+                spawnManager.SpawnUnit<APC>(Resources).Match(x =>
+                    x.Setup(new PositionTarget(input.MousePosition())),
+                    () => { });
             }
         }
     }
