@@ -1,3 +1,4 @@
+using Aggressors.GameState;
 using Aggressors.Resources;
 using Aggressors.Utils;
 using UnityEngine;
@@ -17,19 +18,21 @@ namespace Aggressors.Spawn
 
     public interface ISpawnManager
     {
-        Option<T> SpawnUnit<T>(IResources resource) where T : Unit;
+        Option<T> SpawnUnit<T>(IPlayer player) where T : Unit;
     }
 
     public class SpawnManager : ISpawnManager
     {
-        private SpawnManagerConfiguration configuration;
+        private readonly SpawnManagerConfiguration configuration;
+        private readonly IGameStateManager gameStateManager;
 
-        public SpawnManager(SpawnManagerConfiguration configuration)
+        public SpawnManager(SpawnManagerConfiguration configuration, IGameStateManager gameStateManager)
         {
             this.configuration = configuration;
+            this.gameStateManager = gameStateManager;
         }
 
-        public Option<T> SpawnUnit<T>(IResources resource) where T : Unit
+        public Option<T> SpawnUnit<T>(IPlayer player) where T : Unit
         {
             Unit unitToSpawn = null;
             if (typeof(T) == typeof(APC))
@@ -40,9 +43,9 @@ namespace Aggressors.Spawn
             {
                 unitToSpawn = configuration.Apc;
             }
-            if (resource.TryRemove(unitToSpawn.Cost))
+            if (player.Resources.TryRemove(unitToSpawn.Cost))
             {
-                return Option<T>.Some((T)UnityEngine.Object.Instantiate(unitToSpawn));
+                return Option<T>.Some((T)UnityEngine.Object.Instantiate(unitToSpawn, gameStateManager.CurrentSpawnPoint(player.Side), Quaternion.identity));
             }
             else
             {

@@ -1,4 +1,5 @@
 using System;
+using Aggressors.GameState;
 using Aggressors.Resources;
 using Aggressors.Spawn;
 using Aggressors.Targeting;
@@ -7,6 +8,11 @@ using UnityEngine;
 
 namespace Aggressors
 {
+    public static class ServicesProvider
+    {
+        public static T Get<T>() => Configuration.Instance.Provider.Get<T>();
+    }
+
     public class Configuration : Singleton<Configuration>
     {
         public IServicesProvider Provider { get; private set; }
@@ -18,7 +24,12 @@ namespace Aggressors
         {
             services.AddSingleton<IResourcesManager, ResourcesManager>();
             services.AddSingleton<IGameManager, GameManager>();
-            services.AddSingleton<ISpawnManager, SpawnManager>(() => new SpawnManager(spawnManagerConfiguration));
+            services.AddSingleton<IGameStateManager, GameStateManager>();
+            services.AddSingleton<ISpawnManager, SpawnManager>(() =>
+                new SpawnManager(
+                    spawnManagerConfiguration,
+                    Provider.Get<IGameStateManager>()));
+
             services.AddSingleton<IPlayersManager, PlayersManager>();
             services.AddSingleton<IUnitsManager, UnitsManager>();
             services.AddSingleton<IInput, UnityInput>();

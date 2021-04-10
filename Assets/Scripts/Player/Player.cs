@@ -6,12 +6,14 @@ namespace Aggressors
 {
     public interface IPlayer
     {
+        bool Side { get; set; }
         IResources Resources { get; }
     }
 
     public class Player : IPlayer
     {
-        public IResources Resources { get; private set; }
+        public bool Side { get; set; }
+        public IResources Resources { get; }
         private readonly IGameManager gameManager;
         private readonly ISpawnManager spawnManager;
         private readonly IInput input;
@@ -29,8 +31,8 @@ namespace Aggressors
         {
             if (input.SpawnUnit())
             {
-                spawnManager.SpawnUnit<APC>(Resources).Match(x =>
-                    x.Setup(new PositionTarget(input.MousePosition())),
+                spawnManager.SpawnUnit<APC>(this).Match(
+                    x => x.Setup(new PositionTarget(input.MousePosition())),
                     () => { });
             }
         }

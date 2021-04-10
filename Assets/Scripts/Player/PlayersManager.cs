@@ -13,7 +13,9 @@ namespace Aggressors
 
         public void Start()
         {
-            players.Add(Configuration.Instance.Provider.Get<IPlayer>());
+            var player = ServicesProvider.Get<IPlayer>();
+            player.Side = true;
+            players.Add(player);
         }
     }
 }
