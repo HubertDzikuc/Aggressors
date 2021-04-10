@@ -5,32 +5,30 @@ namespace Aggressors
 {
     public interface IPlayer
     {
-
+        IResources Resources { get; }
     }
 
     public class Player : IPlayer
     {
-        public uint Resources => resources.Amount;
-        private IResources resources;
-
-        private readonly IResourcesManager resourcesManager;
+        public IResources Resources { get; private set; }
         private readonly IGameManager gameManager;
         private readonly ISpawnManager spawnManager;
+        private readonly IInput input;
 
-        public Player(IResourcesManager resourcesManager, IGameManager gameManager, ISpawnManager spawnManager)
+        public Player(IResources resources, IGameManager gameManager, ISpawnManager spawnManager, IInput input)
         {
-            this.resourcesManager = resourcesManager;
+            this.input = input;
             this.gameManager = gameManager;
             this.spawnManager = spawnManager;
             this.gameManager.OnUpdate += Update;
-            this.resources = resourcesManager.AddResource();
+            this.Resources = resources;
         }
 
         private void Update()
         {
-            if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.A))
+            if (input.SpawnUnit())
             {
-                spawnManager.SpawnUnit<APC>();
+                spawnManager.SpawnUnit<APC>(Resources);
             }
         }
     }

@@ -21,8 +21,14 @@ namespace Aggressors
             services.AddSingleton<ISpawnManager, SpawnManager>(() => new SpawnManager(spawnManagerConfiguration));
             services.AddSingleton<IPlayersManager, PlayersManager>();
             services.AddSingleton<IUnitsManager, UnitsManager>();
+            services.AddSingleton<IInput, UnityInput>();
 
-            services.AddScoped<IPlayer, Player>(() => new Player(Provider.Get<IResourcesManager>(), Provider.Get<IGameManager>(), Provider.Get<ISpawnManager>()));
+            services.AddScoped<IPlayer, Player>(() =>
+                new Player(
+                    Provider.Get<IResourcesManager>().AddResource(),
+                    Provider.Get<IGameManager>(),
+                    Provider.Get<ISpawnManager>(),
+                    Provider.Get<IInput>()));
         }
 
         protected override void Awake()

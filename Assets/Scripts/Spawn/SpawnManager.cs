@@ -1,3 +1,5 @@
+using Aggressors.Resources;
+using Aggressors.Utils;
 using UnityEngine;
 
 namespace Aggressors.Spawn
@@ -6,7 +8,7 @@ namespace Aggressors.Spawn
     public class SpawnManagerConfiguration // ScriptableObject
     {
         [field: SerializeField]
-        public APC Apc { get; private set; }
+        public APC Apc { get; private set; } //Change this to be a list and add on validate to make sure all types are implemented 
         public SpawnManagerConfiguration(APC apc)
         {
             this.Apc = apc;
@@ -15,7 +17,7 @@ namespace Aggressors.Spawn
 
     public interface ISpawnManager
     {
-        Unit SpawnUnit<T>() where T : Unit;
+        Option<T> SpawnUnit<T>(IResources resource) where T : Unit;
     }
 
     public class SpawnManager : ISpawnManager
@@ -27,15 +29,24 @@ namespace Aggressors.Spawn
             this.configuration = configuration;
         }
 
-        public Unit SpawnUnit<T>() where T : Unit
+        public Option<T> SpawnUnit<T>(IResources resource) where T : Unit
         {
+            Unit unitToSpawn = null;
             if (typeof(T) == typeof(APC))
             {
-                return UnityEngine.Object.Instantiate(configuration.Apc);
+                unitToSpawn = configuration.Apc;
             }
             else
             {
-                return UnityEngine.Object.Instantiate(configuration.Apc);
+                unitToSpawn = configuration.Apc;
+            }
+            if (resource.TryRemove(unitToSpawn.Cost))
+            {
+                return Option<T>.Some((T)UnityEngine.Object.Instantiate(unitToSpawn));
+            }
+            else
+            {
+                return Option<T>.None();
             }
         }
     }

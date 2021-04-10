@@ -8,7 +8,7 @@ namespace Aggressors.Resources
 
     public class Resources : IResources
     {
-        public uint Amount { get; private set; }
+        public uint Amount { get; private set; } = 100;
 
         public void Add(uint amount)
         {
