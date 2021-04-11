@@ -22,13 +22,13 @@ namespace Aggressors
         protected abstract void Initialize(InitializeOptions options);
         protected void Start()
         {
-            Configuration.Instance.Provider.Get<IUnitsManager>().Register(this);
+            ServicesProvider.Get<IUnitsManager>().Register(this);
             Initialize(new InitializeOptions(this));
         }
 
         protected void OnDestroy()
         {
-            Configuration.Instance.Provider.Get<IUnitsManager>().Deregister(this);
+            ServicesProvider.Get<IUnitsManager>().Deregister(this);
         }
     }
 }

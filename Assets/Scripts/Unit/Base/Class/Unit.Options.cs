@@ -21,7 +21,7 @@ namespace Aggressors
 
             public ITargetSearchPipeline AddTargeting(ILockTarget targetLock)
             {
-                var targetSearchPipeline = new TargetSearchPipeline(targetLock, Configuration.Instance.Provider.Get<IUnitsManager>(), owner);
+                var targetSearchPipeline = new TargetSearchPipeline(targetLock, ServicesProvider.Get<IUnitsManager>(), owner);
 
                 owner.OnUpdate += () => targetSearchPipeline.Handle()?.OnTargeted?.Invoke(owner);
 
