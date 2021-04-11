@@ -6,7 +6,7 @@ namespace Aggressors
 {
     public interface IUnitsManager
     {
-        List<T> GetUnits<T>() where T : Unit;
+        List<T> GetUnits<T>(bool leftSide) where T : Unit;
         void Register(Unit unit);
         void Deregister(Unit unit);
     }
@@ -15,12 +15,12 @@ namespace Aggressors
     {
         private Dictionary<Type, List<Unit>> units = new Dictionary<Type, List<Unit>>();
 
-        public List<T> GetUnits<T>() where T : Unit
+        public List<T> GetUnits<T>(bool leftSide) where T : Unit
         {
             var unitType = typeof(T);
             if (units.ContainsKey(unitType))
             {
-                return units[unitType].Select(x => (T)x).ToList();
+                return units[unitType].Where(x => x.LeftSide == leftSide).Select(x => (T)x).ToList();
             }
             else
             {

@@ -6,7 +6,8 @@ namespace Aggressors.Targeting
     public interface ITargetSearchPipeline
     {
         Unit Handle();
-        void AddAction<T>(Func<List<T>, T> targetSearch) where T : Unit;
+        void Friendlies<T>(Func<List<T>, T> targetSearch) where T : Unit;
+        void Enemies<T>(Func<List<T>, T> targetSearch) where T : Unit;
     }
 
     public class TargetSearchPipeline : ITargetSearchPipeline
@@ -15,11 +16,13 @@ namespace Aggressors.Targeting
 
         private readonly ILockTarget lockTarget;
         private readonly IUnitsManager unitsManager;
+        private readonly Unit owner;
 
-        public TargetSearchPipeline(ILockTarget lockTarget, IUnitsManager unitsManager)
+        public TargetSearchPipeline(ILockTarget lockTarget, IUnitsManager unitsManager, Unit owner)
         {
             this.lockTarget = lockTarget;
             this.unitsManager = unitsManager;
+            this.owner = owner;
         }
 
         public Unit Handle()
@@ -36,9 +39,14 @@ namespace Aggressors.Targeting
             return null;
         }
 
-        public void AddAction<T>(Func<List<T>, T> targetSearch) where T : Unit
+        public void Friendlies<T>(Func<List<T>, T> targetSearch) where T : Unit
         {
-            searches.Add(() => targetSearch(unitsManager.GetUnits<T>()));
+            searches.Add(() => targetSearch(unitsManager.GetUnits<T>(owner.LeftSide)));
+        }
+
+        public void Enemies<T>(Func<List<T>, T> targetSearch) where T : Unit
+        {
+            searches.Add(() => targetSearch(unitsManager.GetUnits<T>(!owner.LeftSide)));
         }
     }
 }

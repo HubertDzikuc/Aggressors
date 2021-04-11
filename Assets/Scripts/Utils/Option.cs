@@ -40,5 +40,13 @@ namespace Aggressors.Utils
                 onSome(Value);
             }
         }
+
+        public void Match(Action<T> onSome)
+        {
+            if (!IsNone && Value != null)
+            {
+                onSome(Value);
+            }
+        }
     }
 }

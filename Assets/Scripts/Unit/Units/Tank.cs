@@ -23,7 +23,7 @@ namespace Aggressors
         protected override void Initialize(InitializeOptions options)
         {
             options.AddTargeting(turret)
-                .AddAction<APC>(TargetingTanks);
+                .Enemies<APC>(TargetingTanks);
         }
     }
 }

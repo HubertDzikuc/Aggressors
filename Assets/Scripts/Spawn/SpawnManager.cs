@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Aggressors.GameState;
 using Aggressors.Resources;
 using Aggressors.Utils;
@@ -5,14 +7,46 @@ using UnityEngine;
 
 namespace Aggressors.Spawn
 {
-    [System.Serializable]
-    public class SpawnManagerConfiguration // ScriptableObject
+    public interface ISpawnManagerConfiguration
     {
-        [field: SerializeField]
-        public APC Apc { get; private set; } //Change this to be a list and add on validate to make sure all types are implemented 
-        public SpawnManagerConfiguration(APC apc)
+        Option<T> GetUnit<T>() where T : Unit;
+    }
+
+    [System.Serializable]
+    public class SpawnManagerConfiguration : ISpawnManagerConfiguration
+    {
+        [SerializeField]
+        private List<Unit> units = new List<Unit>();
+
+        private Dictionary<Type, Unit> unitsDictionary = null;
+
+        public Option<T> GetUnit<T>() where T : Unit
         {
-            this.Apc = apc;
+            if (unitsDictionary == null)
+            {
+                SetupUnits();
+            }
+            if (unitsDictionary.TryGetValue(typeof(T), out var unit))
+            {
+                return Option<T>.Some((T)unit);
+            }
+            else
+            {
+                return Option<T>.None();
+            }
+        }
+
+        private void SetupUnits()
+        {
+            unitsDictionary = new Dictionary<Type, Unit>();
+            foreach (var unit in units)
+            {
+                var type = unit.GetType();
+                if (!unitsDictionary.ContainsKey(type))
+                {
+                    unitsDictionary.Add(type, unit);
+                }
+            }
         }
     }
 
@@ -23,10 +57,10 @@ namespace Aggressors.Spawn
 
     public class SpawnManager : ISpawnManager
     {
-        private readonly SpawnManagerConfiguration configuration;
+        private readonly ISpawnManagerConfiguration configuration;
         private readonly IGameStateManager gameStateManager;
 
-        public SpawnManager(SpawnManagerConfiguration configuration, IGameStateManager gameStateManager)
+        public SpawnManager(ISpawnManagerConfiguration configuration, IGameStateManager gameStateManager)
         {
             this.configuration = configuration;
             this.gameStateManager = gameStateManager;
@@ -34,23 +68,17 @@ namespace Aggressors.Spawn
 
         public Option<T> SpawnUnit<T>(IPlayer player) where T : Unit
         {
-            Unit unitToSpawn = null;
-            if (typeof(T) == typeof(APC))
+            var returnUnit = Option<T>.None();
+
+            configuration.GetUnit<T>().Match(unit =>
             {
-                unitToSpawn = configuration.Apc;
-            }
-            else
-            {
-                unitToSpawn = configuration.Apc;
-            }
-            if (player.Resources.TryRemove(unitToSpawn.Cost))
-            {
-                return Option<T>.Some((T)UnityEngine.Object.Instantiate(unitToSpawn, gameStateManager.CurrentSpawnPoint(player.Side), Quaternion.identity));
-            }
-            else
-            {
-                return Option<T>.None();
-            }
+                if (player.Resources.TryRemove(unit.Cost))
+                {
+                    returnUnit = Option<T>.Some((T)UnityEngine.Object.Instantiate(unit, gameStateManager.CurrentSpawnPoint(player.LeftSide), Quaternion.identity));
+                }
+            });
+
+            return returnUnit;
         }
     }
 }

@@ -339,4 +339,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnManagerConfiguration:
-    <Apc>k__BackingField: {fileID: 7426449991926357904, guid: de54ff35a6ca089469b93f3af9e95dcb, type: 3}
+    units:
+    - {fileID: 7426449991926357904, guid: de54ff35a6ca089469b93f3af9e95dcb, type: 3}
