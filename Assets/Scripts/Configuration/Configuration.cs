@@ -25,10 +25,7 @@ namespace Aggressors
             services.AddSingleton<IResourcesManager, ResourcesManager>();
             services.AddSingleton<IGameManager, GameManager>();
             services.AddSingleton<IGameStateManager, GameStateManager>();
-            services.AddSingleton<ISpawnManager, SpawnManager>(() =>
-                new SpawnManager(
-                    spawnManagerConfiguration,
-                    Provider.Get<IGameStateManager>()));
+            services.AddSingleton<ISpawnManager, SpawnManager>(() => new SpawnManager(spawnManagerConfiguration));
 
             services.AddSingleton<IPlayersManager, PlayersManager>();
             services.AddSingleton<IUnitsManager, UnitsManager>();
@@ -39,7 +36,8 @@ namespace Aggressors
                     Provider.Get<IResourcesManager>().AddResource(),
                     Provider.Get<IGameManager>(),
                     Provider.Get<ISpawnManager>(),
-                    Provider.Get<IInput>()));
+                    Provider.Get<IInput>(),
+                    Provider.Get<IGameStateManager>()));
         }
 
         protected override void Awake()

@@ -41,12 +41,12 @@ namespace Aggressors.Targeting
 
         public void Friendlies<T>(Func<List<T>, T> targetSearch) where T : Unit
         {
-            searches.Add(() => targetSearch(unitsManager.GetUnits<T>(owner.LeftSide)));
+            searches.Add(() => targetSearch(unitsManager.GetUnits<T>(owner.Owner.LeftSide)));
         }
 
         public void Enemies<T>(Func<List<T>, T> targetSearch) where T : Unit
         {
-            searches.Add(() => targetSearch(unitsManager.GetUnits<T>(!owner.LeftSide)));
+            searches.Add(() => targetSearch(unitsManager.GetUnits<T>(!owner.Owner.LeftSide)));
         }
     }
 }

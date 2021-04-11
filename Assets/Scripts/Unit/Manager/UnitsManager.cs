@@ -20,7 +20,7 @@ namespace Aggressors
             var unitType = typeof(T);
             if (units.ContainsKey(unitType))
             {
-                return units[unitType].Where(x => x.LeftSide == leftSide).Select(x => (T)x).ToList();
+                return units[unitType].Where(x => x.Owner.LeftSide == leftSide).Select(x => (T)x).ToList();
             }
             else
             {

@@ -58,12 +58,10 @@ namespace Aggressors.Spawn
     public class SpawnManager : ISpawnManager
     {
         private readonly ISpawnManagerConfiguration configuration;
-        private readonly IGameStateManager gameStateManager;
 
-        public SpawnManager(ISpawnManagerConfiguration configuration, IGameStateManager gameStateManager)
+        public SpawnManager(ISpawnManagerConfiguration configuration)
         {
             this.configuration = configuration;
-            this.gameStateManager = gameStateManager;
         }
 
         public Option<T> SpawnUnit<T>(IPlayer player) where T : Unit
@@ -74,7 +72,7 @@ namespace Aggressors.Spawn
             {
                 if (player.Resources.TryRemove(unit.Cost))
                 {
-                    returnUnit = Option<T>.Some((T)UnityEngine.Object.Instantiate(unit, gameStateManager.CurrentSpawnPoint(player.LeftSide), Quaternion.identity));
+                    returnUnit = Option<T>.Some((T)UnityEngine.Object.Instantiate(unit));
                 }
             });
 
